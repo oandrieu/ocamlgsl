@@ -10,7 +10,7 @@ SRC := cheb.ml diff.ml fit.ml integration.ml interp.ml min.ml monte.ml \
        multifit-data.ml multifit.ml permut.ml qrng.ml rng.ml root.ml \
        linalg.ml blas.ml multiroot.ml multimin.ml sum.ml multifit_nlin.ml \
        eigen.ml siman.ml siman_tsp.ml odeiv.ml stats.ml const.ml histo.ml \
-       wavelet.ml bspline.ml
+       wavelet.ml bspline.ml fft_c.ml fft_c2.ml fft_hc.ml
 
 PROGS     := $(patsubst %.ml,%.test,$(SRC))
 PROGS_OPT := $(patsubst %.ml,%.test.opt,$(SRC))
