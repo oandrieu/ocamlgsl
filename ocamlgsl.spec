@@ -1,6 +1,6 @@
 Summary: OCaml interface for gsl
 Name: ocamlgsl
-Version: 0.6.0
+Version: 1.9.0
 Release: 1
 URL: http://oandrieu.nerim.net/ocaml/#gsl
 Source: %name-%version.tar.gz

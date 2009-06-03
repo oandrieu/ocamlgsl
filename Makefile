@@ -117,7 +117,7 @@ DISTSRC := $(filter-out $(AUTO_SRC),$(SRC)) gsl_sf.mli.q \
            NOTES README NEWS COPYING META ocamlgsl.spec \
            $(wildcard examples/*.ml) examples/Makefile doc \
            $(wildcard test/*.ml) $(wildcard ocamlgsl.info*)
-VERSION := 0.6.0
+VERSION := 1.9.0
 
 all : stubs gsl.cma gsl.cmxa $(CMI)
 

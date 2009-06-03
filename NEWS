@@ -1,3 +1,7 @@
+in 1.9.0
+  - ocamlgsl version number now indicates the required major+minor GSL
+    version
+
 in 0.6.0
   - sync with GSL 1.9
     - Nonsymmetric eigensystems in Gsl_eigen
@@ -27,6 +31,7 @@ in 0.5.0
        gsl_sf_debye_5, gsl_sf_debye_6
   - sync with GSL 1.7
     - add Gsl_randist.binomial_knuth, add Gsl_multifit._linear_svd
+
 in 0.4.1
   - make several record types 'private'. This disallows building bogus values
     that could crash the program.

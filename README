@@ -59,6 +59,7 @@ There are several datatypes for handling vectors and matrices.
   - modules Gsl_blas Gsl_blas_flat and Gsl_blas_gen provide a (quite
     incomplete) interface to CBLAS for these types.
 
+
 * ERROR HANDLING
 Errors in GSL functions are reported as exceptions :
   Gsl_error.Gsl_exn (errno, msg)
@@ -71,3 +72,10 @@ ocamlgsl either return GSL_FAILURE or NaN to GSL, depending on the
 type of callback. In either case the original caml exception is not
 propagated. The GSL function will either return normally (but probably
 with values containing NaNs somewhere) or raise a Gsl_exn exception.
+
+
+* CONTACT
+Project homepage (with source code browser and bug tracker):
+  http://code.google.com/p/ocamlgsl/
+
+Olivier Andrieu <oandrieu@gmail.com>
