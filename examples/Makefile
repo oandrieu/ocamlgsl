@@ -7,7 +7,7 @@ OCAMLBCFLAGS := -g
 OCAMLNCFLAGS := -unsafe
 
 SRC := cheb.ml diff.ml fit.ml integration.ml interp.ml min.ml monte.ml \
-       multifit-data.ml multifit.ml permut.ml qrng.ml rng.ml root.ml \
+       multifit_data.ml multifit.ml permut.ml qrng.ml rng.ml root.ml \
        linalg.ml blas.ml multiroot.ml multimin.ml sum.ml multifit_nlin.ml \
        eigen.ml siman.ml siman_tsp.ml odeiv.ml stats.ml const.ml histo.ml \
        wavelet.ml bspline.ml fft_c.ml fft_c2.ml fft_hc.ml
@@ -18,7 +18,7 @@ PROGS_OPT := $(patsubst %.ml,%.test.opt,$(SRC))
 LIBS    = bigarray.cma gsl.cma
 LIBSOPT = $(LIBS:%.cma=%.cmxa)
 
-MLGSLDIR = ..
+MLGSLDIR = ../src
 
 all : $(PROGS) $(PROGS_OPT)
 

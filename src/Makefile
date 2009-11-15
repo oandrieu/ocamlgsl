@@ -110,11 +110,12 @@ DOBJ     := $(patsubst %.c,%.$(DO),$(filter %.c,$(SRC)))
 
 TRASH = ocamlgsl$(EXE) $(DEF) $(AUTO_SRC) do_cdf do_sf
 
-DISTSRC := $(filter-out $(AUTO_SRC),$(SRC)) gsl_sf.mli.q \
+DISTSRC := $(addprefix src/, \
+	   $(filter-out $(AUTO_SRC),$(SRC)) gsl_sf.mli.q \
            mlgsl_vector.c mlgsl_matrix.c \
-           .depend .depend_c gcc.mak msvc.mak \
-           Makefile .ocamlinit do_const.awk do_cdf.ml do_sf.ml \
-           NOTES README NEWS COPYING META ocamlgsl.spec \
+           .depend .depend_c $(wildcard *.mak) \
+           Makefile .ocamlinit do_const.awk do_cdf.ml do_sf.ml) \
+           NOTES README NEWS COPYING META Makefile ocamlgsl.spec \
            $(wildcard examples/*.ml) examples/Makefile doc \
            $(wildcard test/*.ml) $(wildcard ocamlgsl.info*)
 VERSION := 1.9.0
@@ -165,15 +166,15 @@ install-findlib : all
 ocamlgsl.odoc : $(MLOBJ) $(CMI)
 	$(OCAMLDOC) -v -dump $@ $(filter-out gsl_misc.%, $(filter %.mli, $(SRC)))
 
-doc : doc/index.html
-doc/index.html: ocamlgsl.odoc
-	mkdir -p doc
-	$(OCAMLDOC) -v -html -t 'ocamlgsl $(VERSION)' -d doc -load $<
+doc : ../doc/index.html
+../doc/index.html: ocamlgsl.odoc
+	mkdir -p ../doc
+	$(OCAMLDOC) -v -html -t 'ocamlgsl $(VERSION)' -d ../doc -load $<
 
-info : ocamlgsl.info
-ocamlgsl.info : ocamlgsl.odoc
-	$(OCAMLDOC) -v -texi -t 'ocamlgsl $(VERSION)' -o ocamlgsl.texi -load $<
-	makeinfo ocamlgsl.texi
+info : ../ocamlgsl.info
+../ocamlgsl.info : ocamlgsl.odoc
+	$(OCAMLDOC) -v -texi -t 'ocamlgsl $(VERSION)' -o ../ocamlgsl.texi -load $<
+	makeinfo ../ocamlgsl.texi
 
 test : gsl.cma dllmlgsl.$(D)
 	$(FORT) -I . test/*.test.ml
@@ -245,11 +246,12 @@ endif
 
 dist : doc info
 	export DIRNAME=$${PWD##*/} && \
-	cd .. && mv $$DIRNAME ocamlgsl-$(VERSION) && \
-	tar zcvf ocamlgsl-$(VERSION).tar.gz $(addprefix ocamlgsl-$(VERSION)/,$(DISTSRC)) && mv ocamlgsl-$(VERSION) $$DIRNAME
+	cd ../.. && mv $$DIRNAME ocamlgsl-$(VERSION) && \
+	tar zcvf ocamlgsl-$(VERSION).tar.gz $(addprefix ocamlgsl-$(VERSION)/,$(DISTSRC)) && \
+        mv ocamlgsl-$(VERSION) $$DIRNAME
 
 clean :
-	rm -f *.cm* *.$(SO) *.$(DO)  *.$(D) *.$(A) core* $(TRASH)
+	rm -f *.cm* *.$(SO) *.$(DO) *.$(D) *.$(A) core* $(TRASH)
 
 realclean :
 	rm -f .depend* ocamlgsl.info* ocamlgsl.texi ocamlgsl.odoc
