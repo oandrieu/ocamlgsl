@@ -46,3 +46,6 @@ external minmax_index : float array -> int * int
   = "ml_gsl_stats_minmax_index"
 external quantile_from_sorted_data : float array -> float -> float
   = "ml_gsl_stats_quantile_from_sorted_data"
+
+external correlation : float array -> float array -> float
+  = "ml_gsl_stats_correlation"
