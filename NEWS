@@ -1,6 +1,7 @@
-in 1.9.0
+in 1.10.0
   - ocamlgsl version number now indicates the required major+minor GSL
     version
+  - support for gsl_stats_correlation
 
 in 0.6.0
   - sync with GSL 1.9

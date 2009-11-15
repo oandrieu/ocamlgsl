@@ -1,14 +1,14 @@
 Summary: OCaml interface for gsl
 Name: ocamlgsl
-Version: 1.9.0
+Version: 1.10.0
 Release: 1
-URL: http://oandrieu.nerim.net/ocaml/#gsl
+URL: http://code.google.com/p/ocamlgsl/
 Source: %name-%version.tar.gz
 License: GPL
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/buildroot/%name-%version
-Requires: gsl >= 1.9
-Buildrequires: gsl-devel >= 1.9
+Requires: gsl >= 1.10
+Buildrequires: gsl-devel >= 1.10
 
 %description
 An Objective Caml / GSL interface.

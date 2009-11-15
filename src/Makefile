@@ -118,7 +118,7 @@ DISTSRC := $(addprefix src/, \
            NOTES README NEWS COPYING META Makefile ocamlgsl.spec \
            $(wildcard examples/*.ml) examples/Makefile doc \
            $(wildcard test/*.ml) $(wildcard ocamlgsl.info*)
-VERSION := 1.9.0
+VERSION := 1.10.0
 
 all : stubs gsl.cma gsl.cmxa $(CMI)
 

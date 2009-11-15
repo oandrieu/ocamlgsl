@@ -4,7 +4,7 @@ Objective Caml langage.
 
 
 * REQUIREMENTS
-- gsl >= 1.9
+- gsl >= 1.10
 - ocaml >= 3.07
 - awk and GNU make
 - gcc or MSVC
