@@ -10,7 +10,7 @@ ifeq ($(MNOCYGWIN),-mnocygwin)
 OCAML_BACKEND := mingw
 endif
 
-OCAML_BACKEND ?= $(shell $(OCAMLC) -verbose foo.c 2>&1 | $(AWK) "NR==1 && /\+ gcc/ { printf \"gcc\" ; exit } NR==1 { print \$$2 }")
+OCAML_BACKEND ?= $(shell $(OCAMLC) -verbose foo.c 2>&1 | $(AWK) "NR==1 { print \$$2 }")
 
 OCAMLBCFLAGS := -g 
 OCAMLNCFLAGS :=
@@ -82,13 +82,14 @@ SRC := wrappers.h gsl_misc.ml io.h \
 ifeq ($(OCAML_BACKEND),cl)
 include msvc.mak
 else
-ifeq ($(OCAML_BACKEND),gcc)
+ifeq ($(OCAML_BACKEND:gcc%=gcc),gcc)
 include gcc.mak
 else
 include mingw.mak
 endif
 endif
 
+MLI      := $(filter %.mli,$(SRC))
 CMI      := $(patsubst %.mli,%.cmi,$(filter %.mli,$(SRC)))
 MLOBJ    := $(patsubst %.ml,%.cmo,$(filter %.ml,$(SRC)))
 MLOPTOBJ := $(MLOBJ:%.cmo=%.cmx)
@@ -107,7 +108,9 @@ DISTSRC := $(addprefix src/, \
            $(wildcard examples/*.ml) examples/Makefile doc \
            $(wildcard test/*.ml) $(wildcard ocamlgsl.info*)
 
-all : stubs gsl.cma gsl.cmxa $(CMI)
+all : all-opt
+all-opt : all-byte gsl.cmxa
+all-byte : stubs gsl.cma $(CMI)
 
 STUBS = libmlgsl.$(A)
 ifdef DYNAMIC_LINKING
@@ -138,18 +141,15 @@ top : libmlgsl.$(A) gsl.cma
 ifeq ($(OCAMLFIND),no)
 install : all
 	mkdir -p $(DESTDIR)$(INSTALLDIR)
-	cp $(STUBS) gsl.cma gsl.cmxa gsl.$(A) \
-          $(CMI) $(MLOPTOBJ) $(DESTDIR)$(INSTALLDIR)
+	cp $(STUBS) gsl.cma $(wildcard gsl.cmxa gsl.$(A)) \
+          $(CMI) $(MLI) $(wildcard *.cmx) $(DESTDIR)$(INSTALLDIR)
 	mkdir -p $(DESTDIR)$(OCAMLDIR)/stublibs
 	if test -w $(DESTDIR)$(OCAMLDIR)/stublibs ; then \
           ln -sf $(INSTALLDIR)/dllmlgsl.$(D) $(DESTDIR)$(OCAMLDIR)/stublibs ; fi
 else
 install : all
-	export FINDLIBDIR=$$($(OCAMLFIND) printconf destdir) ; \
-	test -d "$${FINDLIBDIR}/stublibs" && mkdir -p $(DESTDIR)$${FINDLIBDIR}/stublibs ; \
-	OCAMLFIND_DESTDIR=$(DESTDIR)$${FINDLIBDIR} \
-        $(OCAMLFIND) install gsl META \
-          libmlgsl.$(A) dllmlgsl.$(D) gsl.cma gsl.cmxa gsl.$(A) $(CMI) $(MLOPTOBJ) 
+	$(OCAMLFIND) install gsl META \
+          libmlgsl.$(A) dllmlgsl.$(D) gsl.cma $(wildcard gsl.cmxa gsl.$(A)) $(CMI) $(MLI) $(wildcard *.cmx)
 endif
 
 ocamlgsl.odoc : $(MLOBJ) $(CMI)
