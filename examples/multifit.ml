@@ -18,12 +18,13 @@ let read_lines () =
 exception Wrong_format
 let parse_input =
   let lexer = Genlex.make_lexer [] in
-  let parse_data = parser
-    | [< 'Genlex.Float a; 'Genlex.Float b; 'Genlex.Float c >] -> (a, b, c) in
-  fun line ->
-    try
-      parse_data (lexer (Stream.of_string line))
-    with Stream.Failure | Stream.Error _ -> raise Wrong_format
+  let parse_data strm = 
+    match Stream.npeek 3 strm with
+    | [Genlex.Float a ; Genlex.Float b ; Genlex.Float c] -> (a, b, c)
+    | _ -> raise Wrong_format in
+  fun line -> 
+    parse_data (lexer (Stream.of_string line))
+
 
 let parse_data lines =
   let n = List.length lines in

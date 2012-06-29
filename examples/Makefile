@@ -1,7 +1,5 @@
 
-OCAMLC   := ocamlc.opt
-OCAMLOPT := ocamlopt.opt
-CAMLP4O  := camlp4o.opt
+include ../src/config.make
 
 OCAMLBCFLAGS := -g
 OCAMLNCFLAGS := -unsafe
@@ -21,8 +19,6 @@ LIBSOPT = $(LIBS:%.cma=%.cmxa)
 MLGSLDIR = ../src
 
 all : $(PROGS) $(PROGS_OPT)
-
-multifit.test multifit.test.opt : PP=-pp "$(CAMLP4O)"
 
 interp.test interp.test.opt : LIBS += unix.cma
 odeiv.test odeiv.test.opt : LIBS += unix.cma
