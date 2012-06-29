@@ -10,7 +10,7 @@ ifeq ($(MNOCYGWIN),-mnocygwin)
 OCAML_BACKEND := mingw
 endif
 
-OCAML_BACKEND ?= $(shell $(OCAMLC) -verbose foo.c 2>&1 | $(AWK) "NR==1 { print \$$2 }")
+OCAML_BACKEND ?= $(shell $(OCAMLC) -verbose foo.c 2>&1 | $(AWK) "NR==1 && /\+ gcc/ { printf \"gcc\" ; exit } NR==1 { print \$$2 }")
 
 OCAMLBCFLAGS := -g 
 OCAMLNCFLAGS :=
