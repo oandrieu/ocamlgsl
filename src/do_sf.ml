@@ -28,8 +28,6 @@ let words_list s =
       external fun1 : arg1 -> arg2 = "fun1"
    << fun1@fun_c,arg1,arg2 >> -> 
       external fun1 : arg1 -> arg2 = "fun_c"
-   << fun1@fun_c@fun_f,float,float >> -> 
-      external fun1 : float -> float = "fun_c" "fun_f" "float"
 *)
 let ext_quot = 
   let b = Buffer.create 256 in
@@ -39,11 +37,10 @@ let ext_quot =
     | [] -> failwith "ext_quot: empty quotation"
     | _ :: [] -> failwith "ext_quot: no arguments"
     | name_r :: (arg1 :: argr as args) ->
-	let (name, name_c, name_float) = match split '@' name_r with
-	| name :: [] -> name, name, ""
-	| name :: name_c :: [] -> name, name_c, ""
-	| name :: name_c :: name_f :: _ -> name, name_c, name_f
-	| [] -> failwith "ext_quot: too many C function names"
+	let (name, name_c) = match split '@' name_r with
+	| name :: [] -> name, name
+	| name :: name_c :: [] -> name, name_c
+	| _ -> failwith ("ext_quot: too many C function names: " ^ str)
 	in
 	begin
 	  Printf.bprintf b "external %s : " name ;
@@ -52,12 +49,7 @@ let ext_quot =
 	  Printf.bprintf b "\n    = " ;
 	  if List.length args > 6
 	  then Printf.bprintf b "\"%s_bc\" " name_c ;
-	  if (List.for_all ((=) "float") args) && name_float <> ""
-	  then (
-	    if List.length args <= 6 
-	    then Printf.bprintf b "\"%s\"" name_c ;
-	    Printf.bprintf b " \"%s\" \"float\"" name_float )
-	  else Printf.bprintf b "\"%s\"" name_c ;
+	  Printf.bprintf b "\"%s\"" name_c ;
 	  Printf.bprintf b "\n\n"
 	end ;
 	Buffer.contents b
@@ -73,10 +65,7 @@ let sf_quot =
     | name :: args ->
 	let quot = 
 	  Buffer.clear b ;
-	  Printf.bprintf b "%s@ml_gsl_sf_%s%s," name name
-	  (if List.for_all ((=) "float") args 
-	  then "@" ^ "gsl_sf_" ^ name
-	  else "") ;
+	  Printf.bprintf b "%s@ml_gsl_sf_%s," name name ;
 	  List.iter (fun a -> Printf.bprintf b "%s," a) args ;
 	  Printf.bprintf b "float" ;
 	  Buffer.contents b 

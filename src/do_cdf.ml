@@ -37,11 +37,6 @@ let may f = function
   | None -> ()
   | Some v -> f v
 
-let all_float args =
-  List.for_all (function (FLOAT, _) -> true | _ -> false) args
-let print_all_float fun_name oc args =
-  if all_float args
-  then Printf.fprintf oc " \"gsl_cdf_%s\" \"float\"" fun_name
 let print_ml_args oc args = 
   List.iter (fun (ty, a) ->
     let l = String.lowercase a in
@@ -51,11 +46,10 @@ let print_ml_args oc args =
     args
 let print_ml (fun_name, args) =
   Printf.printf 
-    "external %s : %afloat = \"ml_gsl_cdf_%s\"%a\n"
+    "external %s : %afloat = \"ml_gsl_cdf_%s\"\n"
     fun_name
     print_ml_args args
     fun_name
-    (print_all_float fun_name) args
 
 let print_c_args oc args =
   List.iter (fun (ty, _) ->
@@ -78,8 +72,10 @@ let _ =
   then Printf.printf "#include <gsl/gsl_cdf.h>\n#include \"wrappers.h\"\n\n" 
   else Printf.printf "(** Cumulative distribution functions *)\n\n" ;
 
-  try while true do
-    may 
-      (if c_output then print_c else print_ml) 
-      (parse (read_line ()))
-  done with End_of_file -> ()
+  let print =
+    if c_output then print_c else print_ml in
+  try 
+    while true do
+      may print (parse (read_line ()))
+    done
+  with End_of_file -> ()
