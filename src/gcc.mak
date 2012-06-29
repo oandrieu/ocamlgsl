@@ -4,11 +4,10 @@ CC = gcc
 
 GSL_CONFIG := gsl-config
 
-GSLPREFIX := $(shell $(GSL_CONFIG) --prefix)
-GSLINCDIR := $(GSLPREFIX)/include
-GSLCFLAGS := $(filter-out -I/usr/include,$(shell $(GSL_CONFIG) --cflags))
-GSLLIBS   := $(filter -l%,$(shell $(GSL_CONFIG) --libs))
-GSLLIBDIR := $(filter -L%,$(shell $(GSL_CONFIG) --libs))
+GSLINCDIR := $(GSL_PREFIX)/include
+GSLCFLAGS := $(filter-out -I/usr/include,$(GSL_CFLAGS))
+GSLLIBS   := $(filter -l%,$(GSL_LIBS))
+GSLLIBDIR := $(filter -L%,$(GSL_LIBS))
 
 CPPFLAGS += $(GSLCFLAGS) -DHAVE_INLINE -DHAVE_FENV
 CFLAGS    = -g -O2

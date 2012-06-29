@@ -1,20 +1,9 @@
+include config.make
+
 # If you're compiling with cygwin, comment this out
 DYNAMIC_LINKING = true
 
-OCAMLC   := ocamlc
-OCAMLOPT := ocamlopt
-CAMLP4O  := camlp4o
-OCAMLDOC := ocamldoc
-OCAMLMKLIB := ocamlmklib
-OCAMLFIND  := ocamlfind
-
-OCAML    := ocaml
-OCAMLDIR := "$(shell $(OCAMLC) -where)"
-OCAMLDEP := ocamldep
-OCPP     := ocpp
-
 FORT := fort 
-AWK  := gawk
 
 MNOCYGWIN     ?= $(shell $(OCAMLC) -verbose foo.c 2>&1 | $(AWK) "NR==1 { print \$$3 }")	
 ifeq ($(MNOCYGWIN),-mnocygwin)
@@ -22,7 +11,6 @@ OCAML_BACKEND := mingw
 endif
 
 OCAML_BACKEND ?= $(shell $(OCAMLC) -verbose foo.c 2>&1 | $(AWK) "NR==1 { print \$$2 }")
-OCAML_VERSION ?= $(shell $(OCAMLC) -version)
 
 OCAMLBCFLAGS := -g 
 OCAMLNCFLAGS :=
@@ -118,7 +106,6 @@ DISTSRC := $(addprefix src/, \
            NOTES README NEWS COPYING META Makefile ocamlgsl.spec \
            $(wildcard examples/*.ml) examples/Makefile doc \
            $(wildcard test/*.ml) $(wildcard ocamlgsl.info*)
-VERSION := 1.10.0
 
 all : stubs gsl.cma gsl.cmxa $(CMI)
 
@@ -148,6 +135,7 @@ gsl.cmxa : $(MLOPTOBJ)
 top : libmlgsl.$(A) gsl.cma
 	ocamlmktop -I . -o ocamlgsl$(EXE) bigarray.cma gsl.cma
 
+ifeq ($(OCAMLFIND),no)
 install : all
 	mkdir -p $(DESTDIR)$(INSTALLDIR)
 	cp $(STUBS) gsl.cma gsl.cmxa gsl.$(A) \
@@ -155,13 +143,14 @@ install : all
 	mkdir -p $(DESTDIR)$(OCAMLDIR)/stublibs
 	if test -w $(DESTDIR)$(OCAMLDIR)/stublibs ; then \
           ln -sf $(INSTALLDIR)/dllmlgsl.$(D) $(DESTDIR)$(OCAMLDIR)/stublibs ; fi
-
-install-findlib : all
+else
+install : all
 	export FINDLIBDIR=$$($(OCAMLFIND) printconf destdir) ; \
 	test -d "$${FINDLIBDIR}/stublibs" && mkdir -p $(DESTDIR)$${FINDLIBDIR}/stublibs ; \
 	OCAMLFIND_DESTDIR=$(DESTDIR)$${FINDLIBDIR} \
         $(OCAMLFIND) install gsl META \
           libmlgsl.$(A) dllmlgsl.$(D) gsl.cma gsl.cmxa gsl.$(A) $(CMI) $(MLOPTOBJ) 
+endif
 
 ocamlgsl.odoc : $(MLOBJ) $(CMI)
 	$(OCAMLDOC) -v -dump $@ $(filter-out gsl_misc.%, $(filter %.mli, $(SRC)))
