@@ -1,6 +1,6 @@
 /* ocamlgsl - OCaml interface to GSL                        */
 /* Copyright (©) 2007 - Olivier Andrieu                     */
-/* distributed under the terms of the GPL version 2         */
+/* distributed under the terms of the GPL version 3         */
 
 #include <gsl/gsl_bspline.h>
 

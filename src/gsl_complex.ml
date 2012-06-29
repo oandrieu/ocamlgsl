@@ -1,6 +1,6 @@
 (* ocamlgsl - OCaml interface to GSL                        *)
-(* Copyright (©) 2002-2005, 2003 - Olivier Andrieu, Paul Pelzl   *)
-(* distributed under the terms of the GPL version 2         *)
+(* Copyright (©) 2002-2012, 2003 - Olivier Andrieu, Paul Pelzl   *)
+(* distributed under the terms of the GPL version 3         *)
 
 
 type complex = Complex.t =

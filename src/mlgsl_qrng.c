@@ -1,6 +1,6 @@
 /* ocamlgsl - OCaml interface to GSL                        */
-/* Copyright (©) 2002-2005 - Olivier Andrieu                */
-/* distributed under the terms of the GPL version 2         */
+/* Copyright (©) 2002-2012 - Olivier Andrieu                */
+/* distributed under the terms of the GPL version 3         */
 
 
 #include <gsl/gsl_qrng.h>
