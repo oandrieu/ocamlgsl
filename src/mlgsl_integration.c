@@ -7,7 +7,6 @@
 
 #include <caml/mlvalues.h>
 #include <caml/alloc.h>
-#include <caml/callback.h>
 #include <caml/fail.h>
 #include <caml/memory.h>
 
